@@ -20,36 +20,64 @@ namespace BlobOMatic
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Blob[,] blobs;
+        public static int x;
+        public static int y;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            int x = (int)mainCanvas.Width / 100;
-            int y = (int)mainCanvas.Height / 100;
+            x = (int)mainCanvas.Width / 100;
+            y = (int)mainCanvas.Height / 100;
 
-            CreateEmptyBlobs(x, y, out Blob[,] blobs);
-
+            CreateEmptyBlobs(out blobs);
         }
 
-        void CreateEmptyBlobs(int cols, int rows, out Blob[,] blobs)
+        void CreateEmptyBlobs(out Blob[,] blobs)
         {
-            blobs = new Blob[rows, cols];
+            blobs = new Blob[y, x];
 
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < y; row++)
             {
-                for (int column = 0; column < cols; column++)
+                for (int column = 0; column < x; column++)
                 {
                     Blob _ = new Blob();
-                    
-                    blobs[row, column] = _;
 
-                    mainCanvas.Children.Add(_.Ellipse);
-                    Canvas.SetTop(_.Ellipse, row * 100);
-                    Canvas.SetLeft(_.Ellipse, column * 100);
-                    
+                    blobs[row, column] = _;
+                    mainCanvas.Children.Add(_.TextBlock);
+                    Canvas.SetTop(_.TextBlock, row * 100);
+                    Canvas.SetLeft(_.TextBlock, column * 100);
+
+                }
+            }
+
+        }
+        public static void CheckValue(Blob blob)
+        {
+            int currentRow = 0;
+            int currentColumn = 0;
+
+            for (int row = 0; row < y; row++)
+            {
+                var _ = false;
+                for (int column = 0; column < x; column++)
+                {
+                    if (blobs[row,column] == blob)
+                    {
+                        currentRow = row;
+                        currentColumn = column;
+                        _ = true;
+                        break;
+                    }
+                }
+                if (_)
+                {
+                    break;
                 }
             }
 
         }
     }
+
 }
