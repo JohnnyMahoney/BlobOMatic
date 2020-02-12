@@ -10,28 +10,41 @@ namespace BlobOMatic
 {
     public class Blob
     {
-        public Ellipse EllipseAktiv { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.DarkGray };
+        public Ellipse EllipseHover { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.LightGray };
         public Ellipse EllipseInaktiv { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.Gray };
-        public Ellipse EllipseAusgewählt { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.Red };
-        public int Value { get; set; }
+        public Ellipse EllipseAktiv { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.Red };
+        int val;
+        public int Value 
+        {
+            get { return val; }
+            set { val = value; EventChanged(); }  
+        }
         public bool Aktiv { get; set; }
         public TextBlock TextBlock { get; set; }
+        public delegate void BlobEventHandler(Blob blob);
+        public event BlobEventHandler ValueChanged;
+
+        private void EventChanged()
+        {
+            if (ValueChanged != null)
+                ValueChanged(this);
+        }
 
         public Blob()
         {
-            Value = 0;
             Aktiv = false;
 
             TextBlock = new TextBlock
             {
-                Text = Value.ToString(),
+                Text = "",
                 FontSize = 25,
-                Background = new VisualBrush { Visual = EllipseAktiv },
+                Background = new VisualBrush { Visual = EllipseInaktiv },
                 Width = 100,
                 Height = 100,
                 TextAlignment = System.Windows.TextAlignment.Center,
                 Padding = new System.Windows.Thickness(0, 30, 0, 0)
             };
+
 
             TextBlock.MouseEnter += TextBlock_MouseEnter;
             TextBlock.MouseLeave += TextBlock_MouseLeave;
@@ -41,11 +54,14 @@ namespace BlobOMatic
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!this.Aktiv)
+            if (!Aktiv)
             {
-                this.Aktiv = true;
-                this.TextBlock.Background = new VisualBrush(EllipseAusgewählt);
-                MainWindow.CheckValue(this);
+                Aktiv = true;
+                TextBlock.Background = new VisualBrush(EllipseAktiv);
+                TextBlock.Text = "1";
+                MainWindow.CheckValue();
+                //MainWindow.BlobCheckValue(this);
+                //ValueChanged += ValueChanged;
             }
         }
 
@@ -53,7 +69,7 @@ namespace BlobOMatic
         {
             if (!this.Aktiv)
             {
-                this.TextBlock.Background = new VisualBrush(EllipseAktiv); 
+                this.TextBlock.Background = new VisualBrush(EllipseInaktiv); 
             }
         }
 
@@ -61,7 +77,7 @@ namespace BlobOMatic
         {
             if (!this.Aktiv)
             {
-                this.TextBlock.Background = new VisualBrush(EllipseInaktiv); 
+                this.TextBlock.Background = new VisualBrush(EllipseHover); 
             }
         }
 
