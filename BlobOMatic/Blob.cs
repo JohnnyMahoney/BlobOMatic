@@ -14,21 +14,10 @@ namespace BlobOMatic
         public Ellipse EllipseInaktiv { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.Gray };
         public Ellipse EllipseAktiv { get; } = new Ellipse { Width = 100, Height = 100, Stroke = Brushes.Black, Fill = Brushes.Red };
         int val;
-        public int Value 
-        {
-            get { return val; }
-            set { val = value; EventChanged(); }  
-        }
         public bool Aktiv { get; set; }
         public TextBlock TextBlock { get; set; }
         public delegate void BlobEventHandler(Blob blob);
         public event BlobEventHandler ValueChanged;
-
-        private void EventChanged()
-        {
-            if (ValueChanged != null)
-                ValueChanged(this);
-        }
 
         public Blob()
         {
@@ -59,7 +48,7 @@ namespace BlobOMatic
                 Aktiv = true;
                 TextBlock.Background = new VisualBrush(EllipseAktiv);
                 TextBlock.Text = "1";
-                MainWindow.CheckValue();
+                //MainWindow.CheckValue();
                 //MainWindow.BlobCheckValue(this);
                 //ValueChanged += ValueChanged;
             }
