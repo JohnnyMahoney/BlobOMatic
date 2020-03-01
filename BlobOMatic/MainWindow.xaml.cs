@@ -89,7 +89,7 @@ namespace BlobOMatic
             {
                 _.Tag = true;
                 _.Background = active;
-                worker.RunWorkerAsync((_, Blobs));
+                worker.RunWorkerAsync(new Tuple<TextBlock, TextBlock[,]>(_, Blobs));
             }
 
         }
